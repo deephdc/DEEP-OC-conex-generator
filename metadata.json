@@ -1,0 +1,38 @@
+{
+    "title": "conex-generator",
+    "summary": "Generative Neural Network Architecture for Simulation of Extensive Air Showers",
+    "description": [
+		"This is conex-generator application using DEEPaaS API",
+           "",
+           "**References**\n",
+           ""
+	],
+    "keywords": [
+        "docker",
+        "api-v2"
+    ],
+    "license": "BSD-3-Clause",
+    "date_creation": "2020-04-06",
+    "sources": {
+		"dockerfile_repo": "https://github.com/deephdc/DEEP-OC-conex-generator",
+		"docker_registry_repo": "deephdc/deep-oc-conex-generator",
+		"code": "https://github.com/deephdc/conex-generator"
+	},
+    "continuous_integration": {
+        "build_status_badge": "https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/DEEP-OC-conex-generator/master",
+        "build_status_url": "https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/DEEP-OC-conex-generator/job/master"
+    },
+    "tosca": [
+        {
+            "title": "Mesos (CPU)",
+            "url": "https://raw.githubusercontent.com/indigo-dc/tosca-templates/master/deep-oc/deep-oc-marathon-webdav.yml",
+            "inputs": [
+                "rclone_conf",
+                "rclone_url",
+                "rclone_vendor",
+                "rclone_user",
+                "rclone_pass"
+            ]
+        }
+    ]
+}
