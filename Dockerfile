@@ -72,7 +72,8 @@ RUN wget https://downloads.rclone.org/rclone-current-linux-amd64.deb && \
 ENV RCLONE_CONFIG=/srv/.rclone/rclone.conf
 
 # INSTALL oneclient for ONEDATA
-RUN curl -sS  http://get.onedata.org/oneclient-1902.sh | bash && \
+RUN curl -sS  http://get.onedata.org/oneclient-1902.sh | \
+    bash -s -- oneclient=19.02.0.rc2-1~bionic && \
     apt-get clean && \
     mkdir -p /mnt/onedata && \
     rm -rf /var/lib/apt/lists/* && \
