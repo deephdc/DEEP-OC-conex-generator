@@ -25,7 +25,10 @@ LABEL version='0.0.1'
 ARG branch=master
 
 # If to install JupyterLab
-ARG jlab=false
+ARG jlab=true
+
+# oneclient version
+ARG oneclient_ver=19.02.0.rc2-1~bionic
 
 # Install ubuntu updates and python related stuff
 # link python3 to python, pip3 to pip, if needed
@@ -73,7 +76,7 @@ ENV RCLONE_CONFIG=/srv/.rclone/rclone.conf
 
 # INSTALL oneclient for ONEDATA
 RUN curl -sS  http://get.onedata.org/oneclient-1902.sh | \
-    bash -s -- oneclient=19.02.0.rc2-1~bionic && \
+    bash -s -- oneclient="$oneclient_ver" && \
     apt-get clean && \
     mkdir -p /mnt/onedata && \
     rm -rf /var/lib/apt/lists/* && \
