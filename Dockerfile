@@ -10,7 +10,6 @@
 #
 # Be Aware! For the Jenkins CI/CD pipeline, 
 # input args are defined inside the Jenkinsfile, not here!
-#
 
 ARG tag=latest-py3
 
@@ -20,6 +19,9 @@ FROM tensorflow/tensorflow:${tag}
 LABEL maintainer='Marcel Köpke, KIT/IKP'
 LABEL version='0.0.1'
 # Generative Neural Network Architecture for Simulation of Extensive Air Showers
+
+# git repo
+ARG repo=https://github.com/deephdc/conex-generator
 
 # What user branch to clone [!]
 ARG branch=master
@@ -40,7 +42,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
          wget \
          python3-setuptools \
          python3-pip \
-         python3-wheel && \ 
+         python3-wheel && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache/pip/* && \
@@ -53,7 +55,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     fi && \
     python --version && \
     pip --version
-
 
 # Set LANG environment
 ENV LANG C.UTF-8
@@ -93,8 +94,7 @@ RUN pip install --no-cache-dir \
 # Disable FLAAT authentication by default
 ENV DISABLE_AUTHENTICATION_AND_ASSUME_AUTHENTICATED_USER yes
 
-# EXPERIMENTAL: install deep-start script
-# N.B.: This repository also contains run_jupyter.sh
+# install deep-start script
 RUN git clone https://github.com/deephdc/deep-start /srv/.deep-start && \
     ln -s /srv/.deep-start/deep-start.sh /usr/local/bin/deep-start && \
     ln -s /srv/.deep-start/run_jupyter.sh /usr/local/bin/run_jupyter
@@ -104,24 +104,30 @@ ENV JUPYTER_CONFIG_DIR /srv/.deep-start/
 # Necessary for the Jupyter Lab terminal
 ENV SHELL /bin/bash
 RUN if [ "$jlab" = true ]; then \
-       # by default has to work (1.2.0 wrongly required nodejs and npm)
-       pip install --no-cache-dir jupyterlab ; \
+        # by default has to work (1.2.0 wrongly required nodejs and npm)
+        pip install --no-cache-dir jupyterlab ; \
     else echo "[INFO] Skip JupyterLab installation!"; fi
 
 # Install user app:
-RUN git clone -b $branch https://github.com/deephdc/conex-generator && \
+RUN git clone -b "$branch" "$repo" && \
     cd  conex-generator && \
+    grep -vwE "(tensorflow)" requirements.txt > req.txt && \
+    mv req.txt requirements.txt && \
+    grep -vwE "(tensorflow)" test-requirements.txt > test-req.txt && \
+    mv test-req.txt test-requirements.txt && \
     pip install --no-cache-dir -e . && \
     rm -rf /root/.cache/pip/* && \
     rm -rf /tmp/* && \
     cd ..
 
-
 # Open DEEPaaS port
 EXPOSE 5000
 
-# Open Monitoring and Jupyter ports
-EXPOSE 6006  8888
+# Open Monitoring port
+EXPOSE 6006
+
+# Open Jupyterlab port
+EXPOSE 8888
 
 # Account for OpenWisk functionality (deepaas >=0.4.0) + proper docker stop
 CMD ["deepaas-run", "--openwhisk-detect", "--listen-ip", "0.0.0.0", "--listen-port", "5000"]
