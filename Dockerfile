@@ -108,6 +108,9 @@ RUN if [ "$jlab" = true ]; then \
         pip install --no-cache-dir jupyterlab ; \
     else echo "[INFO] Skip JupyterLab installation!"; fi
 
+# make sure to not use cached layers after this line
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h" skipcache
+
 # Install user app:
 RUN git clone -b "$branch" "$repo" && \
     cd  conex-generator && \
