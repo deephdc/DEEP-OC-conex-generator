@@ -25,6 +25,7 @@ ARG repo=https://github.com/deephdc/conex-generator
 
 # What user branch to clone [!]
 ARG branch=master
+ARG commit=ff9d57cc902307dad283b2a1a73925dba261d6c2
 
 # If to install JupyterLab
 ARG jlab=true
@@ -114,6 +115,7 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h" skipcache
 # Install user app:
 RUN git clone -b "$branch" "$repo" && \
     cd  conex-generator && \
+    if [ "$branch" == "master" ]; then git checkout "$commit"; fi && \
     grep -vwE "(tensorflow)" requirements.txt > req.txt && \
     mv req.txt requirements.txt && \
     grep -vwE "(tensorflow)" test-requirements.txt > test-req.txt && \
