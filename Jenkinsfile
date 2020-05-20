@@ -9,8 +9,8 @@ pipeline {
 
     environment {
         dockerhub_repo = "deephdc/deep-oc-conex-generator"
-        base_cpu_tag = "latest-py3"
-        base_gpu_tag = "latest-gpu-py3"
+        base_cpu_tag = "2.2.0"
+        base_gpu_tag = "2.2.0-gpu"
     }
 
     stages {

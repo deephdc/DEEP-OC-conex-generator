@@ -11,7 +11,7 @@
 # Be Aware! For the Jenkins CI/CD pipeline, 
 # input args are defined inside the Jenkinsfile, not here!
 
-ARG tag=latest-py3
+ARG tag=2.2.0
 
 # Base image, e.g. tensorflow/tensorflow:1.14.0-py3
 FROM tensorflow/tensorflow:${tag}
