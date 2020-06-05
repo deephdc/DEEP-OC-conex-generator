@@ -116,9 +116,9 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h" skipcache
 RUN git clone -b "$branch" "$repo" && \
     cd  conex-generator && \
     if [ "$branch" == "master" ]; then git checkout "$commit"; fi && \
-    grep -vwE "(tensorflow)" requirements.txt > req.txt && \
+    grep -vwE "(tensorflow)$" requirements.txt > req.txt && \
     mv req.txt requirements.txt && \
-    grep -vwE "(tensorflow)" test-requirements.txt > test-req.txt && \
+    grep -vwE "(tensorflow)$" test-requirements.txt > test-req.txt && \
     mv test-req.txt test-requirements.txt && \
     pip install --no-cache-dir -e . && \
     rm -rf /root/.cache/pip/* && \
